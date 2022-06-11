@@ -1,4 +1,5 @@
 # Import Libraries
+import datetime
 from aiohttp import request
 from textblob import TextBlob
 import secrets
@@ -27,7 +28,7 @@ client = tweepy.Client(secrets.BearerToken)
 
 # passedName = input("Enter the twitter user you wish to analyze: ")
 # numberOfTweets = input("Enter the # of tweets you want to go back to 5-10: ")
-passedName = "bts_bighit"
+passedName = "elonmusk"
 numberOfTweets = 10
 
 positive = 0
@@ -92,7 +93,7 @@ print("\tpositive number:" , len(positiveList))
 print("\tnegative number: ", len(negativeList))
 print("\tneutral number: ", len(neutralList))
 
-#Creating PieCart
+#Creating PieChart
 labels = ["Positive ["+str(positive)+"%]" , "Neutral ["+str(neutral)+"%]","Negative ["+str(negative)+"%]"]
 sizes = [positive, neutral, negative]
 colors = ["yellowgreen", "blue","red"]
@@ -116,9 +117,16 @@ def create_wordcloud(text):
     stopwords=stopwords,
     repeat=True)
     wc.generate(text)
-    wc.to_file('wc.png')
+    
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    wc.to_file('wc.png' + str(current_time))
+
     print("Word Cloud Saved Successfully")
     path="wc.png"
     sys.displayhook(Image.open(path))
 
 create_wordcloud(positiveList.values)
+create_wordcloud(negativeList.values)
+create_wordcloud(neutralList.values)
+create_wordcloud(tweetListFormatted.values)
